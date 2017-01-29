@@ -123,14 +123,21 @@ class AddMovie(webapp2.RequestHandler):
 
         # TODO 2
         # if the user typed nothing at all, redirect and yell at them
+        if (not new_movie) or (new_movie.strip() == ""):
+            error = "Please enter the movie you want to add."
+            self.redirect("/?error=" + cgi.escape(error))
 
 
         # TODO 3
         # if the user wants to add a terrible movie, redirect and yell at them
+        if new_movie in terrible_movies:
+            error = "You do not want to add '{0}' to your Watchlist.".format(new_movie)
+            self.redirect("/?error=" + cgi.escape(error, quote=True))
 
 
         # TODO 1
         # 'escape' the user's input so that if they typed HTML, it doesn't mess up our site
+        new_movie_escaped = cgi.escape(new_movie, quote=True)
 
         # build response content
         new_movie_element = "<strong>" + new_movie + "</strong>"
@@ -170,4 +177,4 @@ app = webapp2.WSGIApplication([
     ('/add', AddMovie),
     ('/cross-off', CrossOffMovie)
 ], debug=True)
-Contact GitHub API Training Shop Blog About
+
